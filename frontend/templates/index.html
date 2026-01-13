@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录演示系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .welcome-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .welcome-title {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .welcome-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 16px 48px;
+            font-size: 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            min-width: 160px;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-register {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-register:hover {
+            background: #f8f9ff;
+        }
+
+        .features {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .feature-item {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container welcome-container">
+        <div class="welcome-title">欢迎使用</div>
+        <div class="welcome-subtitle">支持多种登录方式的演示系统</div>
+
+        <div class="action-buttons">
+            <a href="/login.html" class="action-btn btn-login">登录</a>
+            <a href="/register.html" class="action-btn btn-register">注册</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title">密码登录</div>
+                <div class="feature-desc">支持用户名/邮箱登录</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📧</div>
+                <div class="feature-title">邮箱登录</div>
+                <div class="feature-desc">验证码快速登录</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">手机登录</div>
+                <div class="feature-desc">短信验证码登录</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔑</div>
+                <div class="feature-title">第三方登录</div>
+                <div class="feature-desc">GitHub/Google/微信等</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
