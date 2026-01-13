@@ -1,12 +1,47 @@
-const API_BASE_URL = 'http://localhost:8000';
+/**
+ * API配置
+ */
 
-const config = {
-    apiBaseUrl: API_BASE_URL,
-    oauthProviders: {
-        github: `${API_BASE_URL}/api/auth/oauth/github`,
-        google: `${API_BASE_URL}/api/auth/oauth/google`,
-        wechat: `${API_BASE_URL}/api/auth/oauth/wechat`,
-        dingtalk: `${API_BASE_URL}/api/auth/oauth/dingtalk`,
-        feishu: `${API_BASE_URL}/api/auth/oauth/feishu`
-    }
+// API基础URL
+const API_BASE_URL = 'http://localhost:8000/api';
+
+// API端点
+const API_ENDPOINTS = {
+    // 认证相关
+    REGISTER: '/auth/register',
+    LOGIN_PASSWORD: '/auth/login/password',
+    LOGIN_EMAIL: '/auth/login/email',
+    LOGIN_SMS: '/auth/login/sms',
+    SEND_EMAIL: '/auth/send-email',
+    SEND_SMS: '/auth/send-sms',
+    OAUTH: '/auth/oauth',
+    OAUTH_CALLBACK: '/auth/oauth',
+    LOGOUT: '/auth/logout',
+
+    // 用户相关
+    USER_PROFILE: '/user/profile',
+    USER_UPDATE: '/user/profile',
+    USER_AVATAR: '/user/avatar'
 };
+
+// 本地存储键名
+const STORAGE_KEYS = {
+    TOKEN: 'token',
+    USER_INFO: 'userInfo'
+};
+
+// OAuth提供商
+const OAUTH_PROVIDERS = [
+    { id: 'github', name: 'GitHub' },
+    { id: 'google', name: 'Google' },
+    { id: 'wechat', name: '微信' },
+    { id: 'dingtalk', name: '钉钉' },
+    { id: 'feishu', name: '飞书' },
+    { id: 'alipay', name: '支付宝' }
+];
+
+// 验证码倒计时时间（秒）
+const COUNTDOWN_SECONDS = 60;
+
+// 请求超时时间（毫秒）
+const REQUEST_TIMEOUT = 10000;

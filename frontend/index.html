@@ -2,131 +2,203 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录演示系统</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <style>
-        .welcome-container {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .welcome-title {
-            font-size: 48px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
-        }
-
-        .welcome-subtitle {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 40px;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 16px 48px;
-            font-size: 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s;
-            min-width: 160px;
-        }
-
-        .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-register {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-register:hover {
-            background: #f8f9ff;
-        }
-
-        .features {
-            margin-top: 60px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-
-        .feature-item {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        .feature-title {
-            font-weight: 600;
-            color: white;
-            margin-bottom: 8px;
-        }
-
-        .feature-desc {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>登录演示 - Login Demo</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container welcome-container">
-        <div class="welcome-title">欢迎使用</div>
-        <div class="welcome-subtitle">支持多种登录方式的演示系统</div>
+    <div class="app-container">
+        <!-- 未登录视图 -->
+        <div id="auth-view" class="view active">
+            <div class="auth-card">
+                <h1 class="app-title">登录演示</h1>
 
-        <div class="action-buttons">
-            <a href="/html/login.html" class="action-btn btn-login">登录</a>
-            <a href="/html/register.html" class="action-btn btn-register">注册</a>
+                <!-- 登录表单 -->
+                <div id="login-form" class="form-container">
+                    <!-- 标签页导航 -->
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="password">密码登录</button>
+                        <button class="tab-btn" data-tab="email">邮箱登录</button>
+                        <button class="tab-btn" data-tab="phone">手机登录</button>
+                    </div>
+
+                    <!-- 密码登录表单 -->
+                    <div class="tab-content active" data-tab="password">
+                        <div class="input-group">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="login-username" placeholder="用户名" autocomplete="username">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input type="password" id="login-password" placeholder="密码" autocomplete="current-password">
+                            <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox">
+                                <input type="checkbox" id="remember-me">
+                                <span>记住我</span>
+                            </label>
+                        </div>
+                        <button type="button" id="btn-login-password" class="btn-primary">登录</button>
+                    </div>
+
+                    <!-- 邮箱验证码登录 -->
+                    <div class="tab-content" data-tab="email">
+                        <div class="input-group">
+                            <span class="input-icon">📧</span>
+                            <input type="email" id="login-email" placeholder="邮箱地址" autocomplete="email">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">🔢</span>
+                            <input type="text" id="login-email-code" placeholder="验证码" maxlength="6">
+                            <button type="button" id="btn-send-email" class="btn-code">发送验证码</button>
+                            <span class="error-message"></span>
+                        </div>
+                        <button type="button" id="btn-login-email" class="btn-primary">登录</button>
+                    </div>
+
+                    <!-- 手机验证码登录 -->
+                    <div class="tab-content" data-tab="phone">
+                        <div class="input-group">
+                            <span class="input-icon">📱</span>
+                            <input type="tel" id="login-phone" placeholder="手机号" maxlength="11" autocomplete="tel">
+                            <span class="error-message"></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-icon">🔢</span>
+                            <input type="text" id="login-phone-code" placeholder="验证码" maxlength="6">
+                            <button type="button" id="btn-send-sms" class="btn-code">发送验证码</button>
+                            <span class="error-message"></span>
+                        </div>
+                        <button type="button" id="btn-login-phone" class="btn-primary">登录</button>
+                    </div>
+
+                    <!-- OAuth登录 -->
+                    <div class="oauth-section">
+                        <div class="divider">
+                            <span>或使用以下方式登录</span>
+                        </div>
+                        <div class="oauth-buttons">
+                            <button class="oauth-btn" data-provider="github" title="GitHub">
+                                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.285 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            </button>
+                            <button class="oauth-btn" data-provider="google" title="Google">
+                                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                            </button>
+                            <button class="oauth-btn" data-provider="wechat" title="微信">
+                                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M8.5 5c-4.14 0-7.5 2.91-7.5 6.5 0 2.21 1.34 4.15 3.37 5.38l-.87 2.62 2.99-1.57c.64.16 1.31.27 2.01.27 4.14 0 7.5-2.91 7.5-6.5S12.64 2 8.5 2v3z" fill="#09BB07"/><path d="M15.5 11c-3.59 0-6.5 2.46-6.5 5.5 0 1.82 1.1 3.42 2.75 4.46l-.75 2.29 2.59-1.36c.55.14 1.13.24 1.74.24 3.59 0 6.5-2.46 6.5-5.5S19.09 8 15.5 8v3z" fill="#09BB07"/><circle cx="6.5" cy="6.5" r="0.5" fill="#fff"/><circle cx="10.5" cy="6.5" r="0.5" fill="#fff"/><circle cx="13.5" cy="12.5" r="0.5" fill="#fff"/><circle cx="17.5" cy="12.5" r="0.5" fill="#fff"/></svg>
+                            </button>
+                            <button class="oauth-btn" data-provider="dingtalk" title="钉钉">
+                                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#0089FF"/></svg>
+                            </button>
+                            <button class="oauth-btn" data-provider="feishu" title="飞书">
+                                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#00D6B9"/></svg>
+                            </button>
+                            <button class="oauth-btn" data-provider="alipay" title="支付宝">
+                                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#1677FF"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 注册链接 -->
+                    <div class="register-link">
+                        没有账号？<a href="#" id="link-to-register">立即注册</a>
+                    </div>
+                </div>
+
+                <!-- 注册表单 -->
+                <div id="register-form" class="form-container hidden">
+                    <h2 class="form-title">注册账号</h2>
+
+                    <div class="input-group">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="reg-username" placeholder="用户名 *" autocomplete="username">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="reg-password" placeholder="密码 *" autocomplete="new-password">
+                        <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+                        <span class="error-message"></span>
+                        <div class="password-strength"></div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="reg-confirm-password" placeholder="确认密码 *" autocomplete="new-password">
+                        <button type="button" class="toggle-password" tabindex="-1">👁️</button>
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon">📧</span>
+                        <input type="email" id="reg-email" placeholder="邮箱（可选）" autocomplete="email">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon">📱</span>
+                        <input type="tel" id="reg-phone" placeholder="手机号（可选）" maxlength="11" autocomplete="tel">
+                        <span class="error-message"></span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-icon">✏️</span>
+                        <input type="text" id="reg-nickname" placeholder="昵称（可选）" autocomplete="nickname">
+                        <span class="error-message"></span>
+                    </div>
+
+                    <button type="button" id="btn-register" class="btn-primary">注册</button>
+
+                    <div class="back-link">
+                        已有账号？<a href="#" id="link-to-login">返回登录</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="features">
-            <div class="feature-item">
-                <div class="feature-icon">🔐</div>
-                <div class="feature-title">密码登录</div>
-                <div class="feature-desc">支持用户名/邮箱登录</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">📧</div>
-                <div class="feature-title">邮箱登录</div>
-                <div class="feature-desc">验证码快速登录</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">📱</div>
-                <div class="feature-title">手机登录</div>
-                <div class="feature-desc">短信验证码登录</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🔑</div>
-                <div class="feature-title">第三方登录</div>
-                <div class="feature-desc">GitHub/Google/微信等</div>
+        <!-- 登录后视图 -->
+        <div id="user-view" class="view">
+            <nav class="navbar">
+                <div class="nav-brand">登录演示</div>
+                <div class="nav-actions">
+                    <img id="nav-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='8' r='4' fill='%23ccc'/%3E%3Cpath d='M12 14c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z' fill='%23ccc'/%3E%3C/svg%3E" alt="头像" class="nav-avatar">
+                    <button id="btn-logout" class="btn-logout">退出</button>
+                </div>
+            </nav>
+
+            <div class="user-card">
+                <div class="user-header">
+                    <img id="user-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='8' r='4' fill='%23ccc'/%3E%3Cpath d='M12 14c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z' fill='%23ccc'/%3E%3C/svg%3E" alt="头像" class="user-avatar">
+                    <div class="user-info">
+                        <h2 id="user-nickname">--</h2>
+                        <p id="user-username">@username</p>
+                    </div>
+                </div>
+                <div class="user-details">
+                    <div class="detail-item">
+                        <span class="detail-label">邮箱</span>
+                        <span id="user-email" class="detail-value">--</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">手机号</span>
+                        <span id="user-phone" class="detail-value">--</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">注册时间</span>
+                        <span id="user-created" class="detail-value">--</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Toast容器 -->
+    <div id="toast-container"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
