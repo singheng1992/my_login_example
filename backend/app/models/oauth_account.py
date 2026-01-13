@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey
+from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from app.core.database import Base
@@ -15,10 +15,14 @@ class OAuthAccount(Base):
     provider_user_id = Column(String(255), nullable=False)
     access_token = Column(String(500), nullable=True)
     refresh_token = Column(String(500), nullable=True)
-    is_deleted = Column(Boolean, default=False, index=True)
+    is_deleted = Column(Boolean, default=False, server_default=text('FALSE'), index=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", backref="oauth_accounts")
+
+    __table_args__ = (
+        UniqueConstraint('provider', 'provider_user_id', name='uq_oauth_provider_user_id'),
+    )
 
     def __repr__(self):
         return f"<OAuthAccount {self.provider}:{self.provider_user_id}>"
