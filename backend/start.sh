@@ -2,18 +2,12 @@
 
 echo "Starting Login Demo Backend..."
 
-# 检查虚拟环境
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
+# 检查uv是否安装
+if ! command -v uv &> /dev/null; then
+    echo "uv is not installed. Installing uv..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.local/bin:$PATH"
 fi
-
-# 激活虚拟环境
-source venv/bin/activate
-
-# 安装依赖
-echo "Installing dependencies..."
-pip install -r requirements.txt
 
 # 复制环境变量文件
 if [ ! -f ".env" ]; then
@@ -25,10 +19,14 @@ fi
 # 创建上传目录
 mkdir -p static/uploads/avatars
 
+# 同步依赖
+echo "Syncing dependencies with uv..."
+uv sync
+
 # 运行数据库迁移
 echo "Running database migrations..."
-alembic upgrade head
+uv run alembic upgrade head
 
 # 启动服务器
 echo "Starting server on http://localhost:8000"
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
