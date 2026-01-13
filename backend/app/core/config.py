@@ -43,6 +43,9 @@ class Settings(BaseSettings):
     OAUTH_DINGTALK_APP_SECRET: str = ""
     OAUTH_FEISHU_APP_ID: str = ""
     OAUTH_FEISHU_APP_SECRET: str = ""
+    OAUTH_ALIPAY_APP_ID: str = ""
+    OAUTH_ALIPAY_PRIVATE_KEY: str = ""
+    OAUTH_ALIPAY_PUBLIC_KEY: str = ""
 
     # CORS配置
     CORS_ORIGINS: list[str] = ["http://localhost:8080", "http://127.0.0.1:8080"]
