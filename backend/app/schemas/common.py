@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Generic, TypeVar
-from typing import Optional, Any
+from typing import Generic, Optional, TypeVar
 
-T = TypeVar('T')
+from pydantic import BaseModel
+
+T = TypeVar("T")
 
 
 class ApiResponse(BaseModel, Generic[T]):
