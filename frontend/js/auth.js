@@ -329,7 +329,7 @@ async function register() {
     const confirmPassword = confirmPasswordInput.value;
     const email = emailInput.value.trim() || undefined;
     const phone = phoneInput.value.trim() || undefined;
-    const nickname = nicknameInput.value.trim() || undefined;
+    const nickname = nicknameInput.value.trim();
 
     // 验证
     let isValid = true;
@@ -373,8 +373,11 @@ async function register() {
         isValid = false;
     }
 
-    // 昵称（可选）
-    if (nickname && !validateField('nickname', nickname)) {
+    // 昵称（必填）
+    if (!nickname) {
+        showFieldError(nicknameInput, errorMessages.required);
+        isValid = false;
+    } else if (!validateField('nickname', nickname)) {
         showFieldError(nicknameInput, errorMessages.nickname);
         isValid = false;
     }

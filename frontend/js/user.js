@@ -8,24 +8,24 @@
  * 加载用户资料
  */
 async function loadUserProfile() {
-    // 先尝试从本地存储读取
-    let userInfo = getUserInfo();
-
-    // 如果有token但没有用户信息，从API获取
-    if (getToken() && !userInfo) {
-        try {
-            const response = await get(API_ENDPOINTS.USER_PROFILE);
-            userInfo = response.data;
-            saveUserInfo(userInfo);
-        } catch (error) {
-            console.error('获取用户信息失败:', error);
-            return;
-        }
+    const token = getToken();
+    if (!token) {
+        return;
     }
 
-    // 更新UI
-    if (userInfo) {
+    try {
+        // 从API获取最新用户信息
+        const response = await get(API_ENDPOINTS.USER_PROFILE);
+        const userInfo = response.data;
+        saveUserInfo(userInfo);
         updateUserInfoUI(userInfo);
+    } catch (error) {
+        console.error('获取用户信息失败:', error);
+        // 如果API调用失败，尝试使用本地缓存
+        const cachedUserInfo = getUserInfo();
+        if (cachedUserInfo) {
+            updateUserInfoUI(cachedUserInfo);
+        }
     }
 }
 

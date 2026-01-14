@@ -60,8 +60,7 @@ async def db_session(setup_database) -> AsyncGenerator:
 async def client():
     """创建测试客户端"""
     async with AsyncClient(
-        app=app,
         base_url="http://test",
-        transport=ASGITransport()
+        transport=ASGITransport(app=app)
     ) as ac:
         yield ac

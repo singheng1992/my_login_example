@@ -27,6 +27,7 @@ body {
     color: var(--text-primary);
     min-height: 100vh;
     line-height: 1.5;
+    overflow-x: hidden;
 }
 
 /* 视图切换 */
@@ -34,11 +35,14 @@ body {
     display: none;
     opacity: 0;
     transition: opacity 0.3s ease;
+    width: 100%;
 }
 
 .view.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
     opacity: 1;
+    min-height: 100vh;
 }
 
 /* 应用容器 */
@@ -50,11 +54,9 @@ body {
 
 /* 认证视图 */
 #auth-view {
-    display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    min-height: 100vh;
 }
 
 /* 认证卡片 */
@@ -377,20 +379,17 @@ body {
 
 /* 用户视图 */
 #user-view {
-    display: none;
-    min-height: 100vh;
     background: var(--bg-color);
-}
-
-#user-view.active {
-    display: block;
+    padding: 20px;
+    overflow-y: auto;
 }
 
 /* 导航栏 */
 .navbar {
+    flex-shrink: 0;
     background: var(--card-bg);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    padding: 16px 24px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -431,34 +430,43 @@ body {
     color: var(--error-color);
 }
 
+/* 用户内容容器 */
+.user-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 /* 用户卡片 */
 .user-card {
     max-width: 500px;
-    margin: 40px auto;
+    width: 100%;
+    margin: 20px auto;
     background: var(--card-bg);
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
-    padding: 32px 24px;
+    padding: 24px 20px;
 }
 
 .user-header {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding-bottom: 24px;
+    gap: 16px;
+    padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 }
 
 .user-avatar {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     object-fit: cover;
 }
 
 .user-info h2 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     margin-bottom: 4px;
 }
@@ -471,7 +479,7 @@ body {
 .user-details {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
 .detail-item {
@@ -608,8 +616,7 @@ body {
     }
 
     .user-card {
-        margin: 20px;
-        padding: 24px 16px;
+        padding: 20px 16px;
     }
 
     .user-header {
@@ -621,6 +628,15 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
+    }
+
+    .user-content {
+        padding: 0 10px;
+    }
+
+    .user-card {
+        margin: 10px auto;
+        padding: 20px 16px;
     }
 }
 

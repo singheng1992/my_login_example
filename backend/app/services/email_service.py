@@ -1,12 +1,15 @@
 import random
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+import ssl
 from datetime import datetime, timedelta
-from sqlalchemy.ext.asyncio import AsyncSession
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from sqlalchemy import select
-from app.models.verification_code import VerificationCode
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.core.config import get_settings
+from app.models.verification_code import VerificationCode
 from app.services.redis_service import redis_service
 
 settings = get_settings()
@@ -19,13 +22,12 @@ class EmailService:
             raise ValueError("验证码发送过于频繁，请60秒后再试")
 
         code = str(random.randint(100000, 999999))
-        expires_at = datetime.utcnow() + timedelta(minutes=5)
+        expires_at = datetime.utcnow() + timedelta(
+            minutes=settings.SMTP_CODE_EXPIRE_MINUTES
+        )
 
         verification_code = VerificationCode(
-            identifier=email,
-            code=code,
-            code_type="email",
-            expires_at=expires_at
+            identifier=email, code=code, code_type="email", expires_at=expires_at
         )
         db.add(verification_code)
         await db.commit()
@@ -57,8 +59,23 @@ class EmailService:
 
         message.attach(MIMEText(body, "html"))
 
-        with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
-            server.starttls()
+        if settings.SMTP_USE_TLS:  # 如果使用TLS，则使用SMTP_SSL
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(
+                settings.SMTP_HOST, settings.SMTP_PORT, context=context
+            ) as server:
+                server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                server.sendmail(settings.SMTP_FROM, to_email, message.as_string())
+        else:
+            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
+                server.starttls(context=self.context)
+                server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                server.sendmail(settings.SMTP_FROM, to_email, message.as_string())
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL(
+            settings.SMTP_HOST, settings.SMTP_PORT, context=context
+        ) as server:
+            # server.starttls()
             server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
             server.send_message(message)
 
@@ -69,7 +86,7 @@ class EmailService:
                 VerificationCode.code == code,
                 VerificationCode.code_type == "email",
                 VerificationCode.used == False,
-                VerificationCode.is_deleted == False
+                VerificationCode.is_deleted == False,
             )
         )
         verification_code = result.scalar_one_or_none()

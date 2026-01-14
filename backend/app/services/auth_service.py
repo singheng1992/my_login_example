@@ -109,7 +109,7 @@ class AuthService:
 
         return user
 
-    def create_token(self, user_id: str) -> str:
+    def create_token(self, user_id: str) -> tuple[str, str]:
         return create_access_token(data={"sub": user_id})
 
 

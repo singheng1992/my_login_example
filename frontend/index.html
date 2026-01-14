@@ -143,7 +143,7 @@
                     </div>
                     <div class="input-group">
                         <span class="input-icon">✏️</span>
-                        <input type="text" id="reg-nickname" placeholder="昵称（可选）" autocomplete="nickname">
+                        <input type="text" id="reg-nickname" placeholder="昵称 *" autocomplete="nickname">
                         <span class="error-message"></span>
                     </div>
 
@@ -166,26 +166,28 @@
                 </div>
             </nav>
 
-            <div class="user-card">
-                <div class="user-header">
-                    <img id="user-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='8' r='4' fill='%23ccc'/%3E%3Cpath d='M12 14c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z' fill='%23ccc'/%3E%3C/svg%3E" alt="头像" class="user-avatar">
-                    <div class="user-info">
-                        <h2 id="user-nickname">--</h2>
-                        <p id="user-username">@username</p>
+            <div class="user-content">
+                <div class="user-card">
+                    <div class="user-header">
+                        <img id="user-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='8' r='4' fill='%23ccc'/%3E%3Cpath d='M12 14c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z' fill='%23ccc'/%3E%3C/svg%3E" alt="头像" class="user-avatar">
+                        <div class="user-info">
+                            <h2 id="user-nickname">--</h2>
+                            <p id="user-username">@username</p>
+                        </div>
                     </div>
-                </div>
-                <div class="user-details">
-                    <div class="detail-item">
-                        <span class="detail-label">邮箱</span>
-                        <span id="user-email" class="detail-value">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">手机号</span>
-                        <span id="user-phone" class="detail-value">--</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">注册时间</span>
-                        <span id="user-created" class="detail-value">--</span>
+                    <div class="user-details">
+                        <div class="detail-item">
+                            <span class="detail-label">邮箱</span>
+                            <span id="user-email" class="detail-value">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">手机号</span>
+                            <span id="user-phone" class="detail-value">--</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">注册时间</span>
+                            <span id="user-created" class="detail-value">--</span>
+                        </div>
                     </div>
                 </div>
             </div>

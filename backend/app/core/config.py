@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
 from functools import lru_cache
+
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -9,7 +10,9 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # 数据库配置
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/login_demo"
+    DATABASE_URL: str = (
+        "postgresql+asyncpg://postgres:postgres@localhost:5432/login_demo"
+    )
 
     # Redis配置
     REDIS_URL: str = "redis://localhost:6379/0"
@@ -25,12 +28,15 @@ class Settings(BaseSettings):
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
     SMTP_FROM: str = ""
+    SMTP_USE_TLS: bool = True
+    SMTP_CODE_EXPIRE_MINUTES: int = 5
 
-    # 短信配置 (阿里云)
-    SMS_ACCESS_KEY: str = ""
-    SMS_ACCESS_SECRET: str = ""
-    SMS_SIGN_NAME: str = ""
-    SMS_TEMPLATE_CODE: str = ""
+    # 短信配置 (短信宝)
+    SMSBAO_USERNAME: str = ""
+    SMSBAO_PASSWORD: str = ""
+    SMSBAO_URL: str = "http://api.smsbao.com/"
+    SMSBAO_TEMPLATE: str = "【Login Demo】您的验证码是：{}，请勿泄露给他人。"
+    SMSBAO_CODE_EXPIRE_MINUTES: int = 1
 
     # OAuth配置
     OAUTH_GITHUB_CLIENT_ID: str = ""

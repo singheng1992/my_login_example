@@ -149,9 +149,46 @@ class TestOAuth:
 class TestLogout:
     """登出测试"""
 
-    async def test_logout(self, client: AsyncClient):
-        """测试登出接口"""
+    async def test_logout_adds_token_to_blacklist(self, client: AsyncClient):
+        """测试登出将token加入黑名单"""
+        # 1. 注册用户
+        await client.post(
+            "/api/auth/register",
+            json={
+                "username": "logoutuser",
+                "password": "password123",
+                "nickname": "登出用户"
+            }
+        )
+
+        # 2. 登录获取 token
+        login_response = await client.post(
+            "/api/auth/login/password",
+            json={
+                "username": "logoutuser",
+                "password": "password123"
+            }
+        )
+        assert login_response.status_code == 200
+        token = login_response.json()["data"]["access_token"]
+
+        # 3. 登出（需要传入 token）
+        logout_response = await client.post(
+            "/api/auth/logout",
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert logout_response.status_code == 200
+        assert logout_response.json()["code"] == 0
+
+        # 4. 使用已登出的 token 访问受保护接口应该失败
+        protected_response = await client.get(
+            "/api/user/profile",
+            headers={"Authorization": f"Bearer {token}"}
+        )
+        assert protected_response.status_code == 401
+        assert "blacklist" in protected_response.json()["detail"].lower()
+
+    async def test_logout_without_token(self, client: AsyncClient):
+        """测试没有token时登出应该返回401"""
         response = await client.post("/api/auth/logout")
-        assert response.status_code == 200
-        data = response.json()
-        assert data["code"] == 0
+        assert response.status_code == 401
