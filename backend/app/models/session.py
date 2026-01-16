@@ -1,6 +1,5 @@
-from sqlalchemy import Column, String, Boolean, DateTime, ForeignKey, Integer, Text
+from sqlalchemy import Column, String, Boolean, DateTime, Integer, Text
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
 from datetime import datetime
 import uuid
 
@@ -12,7 +11,7 @@ class Session(Base):
     __tablename__ = "sessions"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), nullable=False, index=True)
     token_jti = Column(String(255), unique=True, nullable=False, index=True, comment="Token唯一标识(JWT ID)")
     device_info = Column(String(255), nullable=True, comment="设备信息")
     ip_address = Column(String(45), nullable=True, comment="IP地址")
@@ -23,6 +22,3 @@ class Session(Base):
     expires_at = Column(DateTime, nullable=False, index=True, comment="过期时间")
     is_deleted = Column(Boolean, default=False, nullable=False, index=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
-
-    # 关系
-    user = relationship("User", back_populates="sessions")

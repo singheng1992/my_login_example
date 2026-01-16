@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     APP_NAME: str = "Login Demo API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
-
+    SERVER_BASE_URL: str = "http://localhost:8000"  # OAuth 回调需要使用
+    FRONTEND_URL: str = "http://localhost:8080"  # OAuth 回调需要使用
     # 数据库配置
     DATABASE_URL: str = (
         "postgresql+asyncpg://postgres:postgres@localhost:5432/login_demo"
@@ -52,6 +53,10 @@ class Settings(BaseSettings):
     OAUTH_ALIPAY_APP_ID: str = ""
     OAUTH_ALIPAY_PRIVATE_KEY: str = ""
     OAUTH_ALIPAY_PUBLIC_KEY: str = ""
+
+    # 微信公众平台配置（用于接收推送消息）
+    WECHAT_MP_TOKEN: str = ""  # 服务器配置验证用的 Token
+    WECHAT_MP_ENCODING_AES_KEY: str = ""  # 消息加密密钥（可选，安全模式需要）
 
     # CORS配置
     CORS_ORIGINS: list[str] = ["http://localhost:8080", "http://127.0.0.1:8080"]

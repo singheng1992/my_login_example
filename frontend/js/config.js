@@ -21,6 +21,7 @@ const API_ENDPOINTS = {
     // 用户相关
     USER_PROFILE: '/user/profile',
     USER_UPDATE: '/user/profile',
+    USER_UPDATE_EMAIL: '/user/email',
     USER_AVATAR: '/user/avatar'
 };
 
@@ -34,10 +35,9 @@ const STORAGE_KEYS = {
 const OAUTH_PROVIDERS = [
     { id: 'github', name: 'GitHub' },
     { id: 'google', name: 'Google' },
-    { id: 'wechat', name: '微信' },
     { id: 'dingtalk', name: '钉钉' },
     { id: 'feishu', name: '飞书' },
-    { id: 'alipay', name: '支付宝' }
+    { id: 'wechat', name: '微信' }
 ];
 
 // 验证码倒计时时间（秒）

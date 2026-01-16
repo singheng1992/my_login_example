@@ -2,7 +2,6 @@ import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, Boolean, DateTime, text
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 
@@ -19,9 +18,6 @@ class User(Base):
     is_deleted = Column(Boolean, default=False, server_default=text('FALSE'), index=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
-
-    # 关系
-    sessions = relationship("Session", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User {self.nickname}>"

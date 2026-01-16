@@ -68,10 +68,8 @@ class EmailService:
                 server.sendmail(settings.SMTP_FROM, to_email, message.as_string())
         else:
             with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
-                server.starttls(context=self.context)
                 server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
                 server.sendmail(settings.SMTP_FROM, to_email, message.as_string())
-        context = ssl.create_default_context()
         with smtplib.SMTP_SSL(
             settings.SMTP_HOST, settings.SMTP_PORT, context=context
         ) as server:

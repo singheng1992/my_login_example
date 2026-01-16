@@ -273,16 +273,15 @@ async function loginWithPhone() {
  */
 async function loginWithOAuth(provider) {
     try {
+        // 保存当前URL，用于回调后返回
+        sessionStorage.setItem('oauth_return_url', window.location.href);
+
         // 获取授权URL
         const response = await get(`${API_ENDPOINTS.OAUTH}/${provider}`);
         const authUrl = response.data.auth_url;
 
-        // 添加前端回调地址
-        const callbackUrl = `${window.location.origin}${window.location.pathname}?oauth_callback=1`;
-        const finalAuthUrl = `${authUrl}&redirect_uri=${encodeURIComponent(callbackUrl)}`;
-
-        // 跳转到OAuth授权页面
-        window.location.href = finalAuthUrl;
+        // 直接跳转到OAuth授权页面（不要修改redirect_uri）
+        window.location.href = authUrl;
 
     } catch (error) {
         toast.error(error.message || 'OAuth登录失败');
@@ -291,22 +290,50 @@ async function loginWithOAuth(provider) {
 
 /**
  * 处理OAuth回调
+ * 后端处理完OAuth后会重定向回前端，并传递token参数
  */
 function handleOAuthCallback() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const isCallback = urlParams.get('oauth_callback');
+    // 从 URL fragment (hash) 中获取 token
+    const hash = window.location.hash;
+    const tokenMatch = hash.match(/token=([^&]+)/);
 
-    if (isCallback) {
-        // 检查是否有token
-        const token = getToken();
-        if (token) {
+    // 从 URL query 中获取 error
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
+
+    if (error) {
+        toast.error(decodeURIComponent(error));
+        // 清除URL参数
+        window.history.replaceState({}, document.title, window.location.pathname);
+        return;
+    }
+
+    if (tokenMatch) {
+        const token = tokenMatch[1];
+
+        // 保存token
+        saveToken(token);
+
+        // 获取用户信息
+        loadUserProfile().then((userInfo) => {
             toast.success('登录成功');
             switchView('user-view');
-            loadUserProfile();
 
-            // 清除URL参数
+            // 清除URL fragment
             window.history.replaceState({}, document.title, window.location.pathname);
-        }
+
+            // 检查用户是否有邮箱，没有则弹出补全模态框
+            if (!userInfo || !userInfo.email) {
+                // 稍微延迟弹出，让用户先看到登录成功
+                setTimeout(() => {
+                    showEmailCompletionModal();
+                }, 500);
+            }
+        }).catch(() => {
+            // 如果获取用户信息失败，至少切换视图
+            switchView('user-view');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        });
     }
 }
 
@@ -626,7 +653,4 @@ function initAuthModule() {
     document.getElementById('login-phone-code').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') loginWithPhone();
     });
-
-    // 检查OAuth回调
-    handleOAuthCallback();
 }

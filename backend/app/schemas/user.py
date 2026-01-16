@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -18,6 +18,12 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     nickname: Optional[str] = None
     avatar_url: Optional[str] = None
+
+
+class UpdateEmailRequest(BaseModel):
+    """更新邮箱请求"""
+    email: EmailStr = Field(..., description="新邮箱地址")
+    code: str = Field(..., min_length=6, max_length=6, description="邮箱验证码")
 
 
 class UserResponse(BaseModel):

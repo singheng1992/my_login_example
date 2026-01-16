@@ -8,6 +8,9 @@
  * 初始化应用
  */
 function initApp() {
+    // 先处理OAuth回调（需要在checkLoginStatus之前）
+    handleOAuthCallback();
+
     // 初始化认证模块
     initAuthModule();
 
